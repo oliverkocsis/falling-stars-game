@@ -38,10 +38,25 @@ body {
     font-size: 24px;
 }
 
+#bucketSpeed {
+    position: absolute;
+    top: 36px;
+    left: 10px;
+    font-size: 24px;
+}
+
 .blue-circle {
     position: absolute;
     width: 20px;
     height: 20px;
     background-color: #3498db;
+    border-radius: 50%;
+}
+
+.red-circle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #e74c3c;
     border-radius: 50%;
 }
