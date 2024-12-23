@@ -7,46 +7,45 @@ const bucketSpeedDisplay = document.getElementById("bucketSpeed");
 // Initial game state
 let score = 0;
 let bucketSpeed = 20;
+let gameHeight = window.innerHeight;
+let gameWidth = window.innerWidth;
 
 // Event Listeners
 document.addEventListener("keydown", handleKeyboardInput);
 gameContainer.addEventListener("touchstart", handleTouchInput);
+window.addEventListener("resize", updateGameDimensions); // Adjust dimensions dynamically
 
 // Function: Handle keyboard input
 function handleKeyboardInput(event) {
     const bucketRect = bucket.getBoundingClientRect();
-    const containerRect = gameContainer.getBoundingClientRect();
 
     if (event.key === "ArrowLeft") {
-        moveBucket(-bucketSpeed, bucketRect, containerRect);
+        moveBucket(-bucketSpeed, bucketRect);
     } else if (event.key === "ArrowRight") {
-        moveBucket(bucketSpeed, bucketRect, containerRect);
+        moveBucket(bucketSpeed, bucketRect);
     }
 }
 
 // Function: Handle touch input
 function handleTouchInput(event) {
     const touchX = event.touches[0].clientX;
-    const containerWidth = gameContainer.offsetWidth;
-
     const bucketRect = bucket.getBoundingClientRect();
-    const containerRect = gameContainer.getBoundingClientRect();
 
-    if (touchX < containerWidth / 2) {
-        moveBucket(-bucketSpeed, bucketRect, containerRect);
+    if (touchX < gameWidth / 2) {
+        moveBucket(-bucketSpeed, bucketRect);
     } else {
-        moveBucket(bucketSpeed, bucketRect, containerRect);
+        moveBucket(bucketSpeed, bucketRect);
     }
 }
 
 // Function: Move the bucket
-function moveBucket(speed, bucketRect, containerRect) {
+function moveBucket(speed, bucketRect) {
     const newLeft = bucket.offsetLeft + speed;
 
-    if (speed < 0 && bucketRect.left > containerRect.left) {
+    if (speed < 0 && bucketRect.left > 0) {
         bucket.style.left = `${Math.max(newLeft, 0)}px`;
-    } else if (speed > 0 && bucketRect.right < containerRect.right) {
-        bucket.style.left = `${Math.min(newLeft, containerRect.width - bucketRect.width)}px`;
+    } else if (speed > 0 && bucketRect.right < gameWidth) {
+        bucket.style.left = `${Math.min(newLeft, gameWidth - bucket.offsetWidth)}px`;
     }
 }
 
@@ -55,7 +54,7 @@ function createObject() {
     const objectClass = getRandomObjectClass();
     const object = document.createElement("div");
     object.classList.add(objectClass);
-    object.style.left = `${Math.random() * window.innerWidth}px`;
+    object.style.left = `${Math.random() * gameWidth}px`;
     object.style.top = "0px";
     gameContainer.appendChild(object);
 
@@ -80,7 +79,7 @@ function moveObject(object, objectClass) {
             handleCollision(objectClass);
             object.remove();
             clearInterval(interval);
-        } else if (objectRect.top > window.innerHeight) {
+        } else if (objectRect.top > gameHeight) {
             object.remove();
             clearInterval(interval);
         } else {
@@ -132,5 +131,15 @@ function updateBucketSpeedDisplay() {
     bucketSpeedDisplay.textContent = `Bucket Speed: ${bucketSpeed}`;
 }
 
+// Function: Update game dimensions on resize
+function updateGameDimensions() {
+    gameHeight = window.innerHeight;
+    gameWidth = window.innerWidth;
+    bucket.style.bottom = "20px"; // Ensure bucket remains at bottom
+}
+
 // Initialize object spawning
 setInterval(createObject, 1000);
+
+// Set initial game dimensions
+updateGameDimensions();

@@ -5,6 +5,7 @@ body {
     background-color: #282c34;
     color: white;
     touch-action: manipulation;
+    /* Prevents zooming or default touch actions */
 }
 
 #game-container {
@@ -17,6 +18,7 @@ body {
 #bucket {
     position: absolute;
     bottom: 20px;
+    /* Ensure it's visible at the bottom */
     left: 50%;
     width: 100px;
     height: 30px;
@@ -24,40 +26,39 @@ body {
     transform: translateX(-50%);
 }
 
-.star {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #f1c40f;
-    border-radius: 50%;
-}
-
-#score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 24px;
-}
-
-#bucketSpeed {
-    position: absolute;
-    top: 36px;
-    left: 10px;
-    font-size: 24px;
-}
-
-.blue-circle {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #3498db;
-    border-radius: 50%;
-}
-
+.star,
+.blue-circle,
 .red-circle {
     position: absolute;
     width: 20px;
     height: 20px;
-    background-color: #e74c3c;
     border-radius: 50%;
+}
+
+.star {
+    background-color: #f1c40f;
+}
+
+.blue-circle {
+    background-color: #3498db;
+}
+
+.red-circle {
+    background-color: #e74c3c;
+}
+
+#score,
+#bucketSpeed {
+    position: absolute;
+    left: 10px;
+    font-size: 24px;
+    color: white;
+}
+
+#score {
+    top: 10px;
+}
+
+#bucketSpeed {
+    top: 40px;
 }
