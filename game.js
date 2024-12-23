@@ -14,44 +14,52 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// Spawn stars
-function createStar() {
-    const star = document.createElement("div");
-    star.classList.add("star");
-    star.style.left = `${Math.random() * window.innerWidth}px`;
-    star.style.top = "0px";
-    gameContainer.appendChild(star);
+// Spawn objects (star or blue circle)
+function createObject() {
+    const isBlueCircle = Math.random() < 0.2; // 20% chance to spawn a blue circle
+    const object = document.createElement("div");
+    object.classList.add(isBlueCircle ? "blue-circle" : "star");
+    object.style.left = `${Math.random() * window.innerWidth}px`;
+    object.style.top = "0px";
+    gameContainer.appendChild(object);
 
-    moveStar(star);
+    moveObject(object, isBlueCircle);
 }
 
-// Move stars downward
-function moveStar(star) {
+// Move objects downward
+function moveObject(object, isBlueCircle) {
     const interval = setInterval(() => {
-        const starRect = star.getBoundingClientRect();
+        const objectRect = object.getBoundingClientRect();
         const bucketRect = bucket.getBoundingClientRect();
 
         // Check for collision
         if (
-            starRect.bottom >= bucketRect.top &&
-            starRect.left >= bucketRect.left &&
-            starRect.right <= bucketRect.right
+            objectRect.bottom >= bucketRect.top &&
+            objectRect.left >= bucketRect.left &&
+            objectRect.right <= bucketRect.right
         ) {
-            score++;
-            scoreDisplay.textContent = `Score: ${score}`;
-            star.remove();
+            if (isBlueCircle) {
+                // Increase bucket size
+                const currentWidth = parseInt(window.getComputedStyle(bucket).width);
+                bucket.style.width = `${currentWidth + 20}px`;
+            } else {
+                // Increase score for catching stars
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+            }
+            object.remove();
             clearInterval(interval);
         }
 
         // Remove if it falls out of bounds
-        if (starRect.top > window.innerHeight) {
-            star.remove();
+        if (objectRect.top > window.innerHeight) {
+            object.remove();
             clearInterval(interval);
         }
 
-        star.style.top = `${star.offsetTop + 5}px`;
+        object.style.top = `${object.offsetTop + 5}px`;
     }, 30);
 }
 
-// Spawn stars at intervals
-setInterval(createStar, 1000);
+// Spawn objects at intervals
+setInterval(createObject, 1000);

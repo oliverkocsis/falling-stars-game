@@ -37,3 +37,11 @@ body {
     left: 10px;
     font-size: 24px;
 }
+
+.blue-circle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #3498db;
+    border-radius: 50%;
+}
