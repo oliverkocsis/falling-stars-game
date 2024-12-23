@@ -8,11 +8,30 @@ let bucketSpeed = 20; // Initial bucket movement speed
 // Move the bucket with arrow keys
 document.addEventListener("keydown", (e) => {
     const bucketRect = bucket.getBoundingClientRect();
-    if (e.key === "ArrowLeft" && bucketRect.left > 0) {
-        bucket.style.left = `${bucket.offsetLeft - bucketSpeed}px`;
+    const containerRect = gameContainer.getBoundingClientRect();
+
+    if (e.key === "ArrowLeft" && bucketRect.left > containerRect.left) {
+        bucket.style.left = `${Math.max(bucket.offsetLeft - bucketSpeed, 0)}px`;
     }
-    if (e.key === "ArrowRight" && bucketRect.right < window.innerWidth) {
-        bucket.style.left = `${bucket.offsetLeft + bucketSpeed}px`;
+    if (e.key === "ArrowRight" && bucketRect.right < containerRect.right) {
+        bucket.style.left = `${Math.min(bucket.offsetLeft + bucketSpeed, containerRect.width - bucketRect.width)}px`;
+    }
+});
+
+// Enable touch controls for mobile devices
+gameContainer.addEventListener("touchstart", (e) => {
+    const touchX = e.touches[0].clientX; // X-coordinate of the touch
+    const containerWidth = gameContainer.offsetWidth;
+
+    const bucketRect = bucket.getBoundingClientRect();
+    const containerRect = gameContainer.getBoundingClientRect();
+
+    if (touchX < containerWidth / 2 && bucketRect.left > containerRect.left) {
+        // Tapped on the left side
+        bucket.style.left = `${Math.max(bucket.offsetLeft - bucketSpeed, 0)}px`;
+    } else if (touchX >= containerWidth / 2 && bucketRect.right < containerRect.right) {
+        // Tapped on the right side
+        bucket.style.left = `${Math.min(bucket.offsetLeft + bucketSpeed, containerRect.width - bucketRect.width)}px`;
     }
 });
 

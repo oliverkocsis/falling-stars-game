@@ -4,6 +4,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #282c34;
     color: white;
+    touch-action: manipulation;
 }
 
 #game-container {
